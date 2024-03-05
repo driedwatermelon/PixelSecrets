@@ -11,9 +11,9 @@
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <label for="s_text">1. Enter secret text:</label><br>
-      <textarea id="s_text" name="secret_text" rows="5" cols="50"></textarea><br>
+      <textarea id="secret_text" name="text" rows="5" cols="50"></textarea><br>
       <label for="c_image">2. Upload carrier image</label><br>
-      <input type="file" id="c_image" name="carrier_image"><br>
+      <input type="file" id="carrier_image" name="file"><br>
       <label for="pwd">3. Set password</label><br>
       <input type="password" id="pwd" name="password"><br>
       <input type="submit" id="sub_btn" value="Encode and Download">
