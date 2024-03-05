@@ -1,0 +1,32 @@
+/* App.css */
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  background-color: #1e1e1e;
+  min-height: 100vh;
+
+}
+
+.content {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  transition: max-width 0.5s ease; /* Add transition for smoother width changes */
+}
+
+/* Media queries for tablet and mobile views */
+@media screen and (max-width: 1024px) {
+  .content {
+    max-width: 90%; /* Adjust max-width for tablet */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    max-width: 95%; /* Adjust max-width for mobile */
+  }
+}

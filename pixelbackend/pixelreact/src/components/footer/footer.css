@@ -1,0 +1,64 @@
+/* components/Footer/footerComponent.css */
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* This prevents scrolling */
+}
+
+.content-container {
+  height: calc(100vh - 100px); /* Adjusted to accommodate the footer height */
+  overflow-y: auto; /* Allows scrolling within content if necessary */
+  padding-bottom: 100px; /* Added padding to accommodate the footer */
+}
+
+.footer-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.footer {
+  padding: .5rem 2rem .5rem 2rem;
+  background-color: #111111;
+  text-align: center;
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-text {
+  margin-right: 16px;
+  color: white;
+}
+
+#coffee-button {
+  margin-top: 8px;
+  background-color: #161515;
+  color: white;
+}
+
+@media screen and (max-width: 1024px) {
+  .footer {
+    width: 80%;
+    margin-left: 10%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .footer {
+    width: 100%;
+    margin-left: 0;
+    text-align: center;
+  }
+  .footer-text {
+    margin: 0 auto;
+  }
+  #coffee-button {
+    display: none;
+  }
+}

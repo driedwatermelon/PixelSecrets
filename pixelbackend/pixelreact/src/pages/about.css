@@ -1,0 +1,40 @@
+.container {
+    width: 100%;
+    max-height: 80vh; /* Adjust the height as needed */
+    overflow-y: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  .container::-webkit-scrollbar {
+    width: 0;
+    background: transparent; /* Optional: Set background color of the scrollbar track */
+  }
+  .heading {
+    color: gray;
+  }
+  
+  .divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+  }
+  
+  .subheading {
+    color: #666;
+  }
+  
+  .paragraph {
+    color: #5b5a5a;
+    line-height: 1.8;
+  }
+  ul{
+    color: #5b5a5a;
+  }
+  li{
+    color: #5b5a5a;
+    line-height: 1.8;
+  }
+
+  span{
+    color: gray;
+  }
