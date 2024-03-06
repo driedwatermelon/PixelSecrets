@@ -284,12 +284,26 @@ case 2:
         case 3:
           return (
             <Box>
-            <Container maxWidth="sm">
-                  <Box display="flex" flexDirection="column" alignItems="flex-end">
-                    <Typography variant="body1" sx={{ marginBottom: 2, fontSize: 14 , color: 'grey'}}>
-                      Your image has been decoded and is ready to be downloaded.
+            <Container maxWidth="sm" sx={{marginBottom:3}}>
+                  <Box display="flex" flexDirection="column" alignItems="flex-start">
+                    <Typography variant="body1" textAlign="center" sx={{ marginBottom: 2, fontSize: 14 , color: 'grey'}}>
+                      Your decoded text is here.
                     </Typography>
                   </Box>
+                  <TextField
+                    
+                      className="textField-custom" 
+                      multiline
+                      rows={3}
+                      fullWidth
+                      variant="outlined"
+                      value={formData.text}
+                      onChange={(e) => handleInputChange("text", e.target.value)}
+                      InputProps={{ style: { color: 'white' } }} 
+                      InputLabelProps={{
+                      style: { color: 'grey', fontSize: 14  }
+                   }}
+                  />
               </Container>
               <Box className="step4-button">
                 <Button
