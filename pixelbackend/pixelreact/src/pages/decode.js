@@ -329,7 +329,7 @@ case 2:
                     marginRight: 15
                   }}
                 >
-                  Encode
+                  Decode
                 </Button>
                 <Button
                   variant="contained"

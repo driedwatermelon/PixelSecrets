@@ -108,11 +108,11 @@ const handleSubmit = async (event) => {
 
     console.log('FormData before submission:', formDataToSend); // Debugging
 
-    const response = await axios.post("/encode/", formDataToSend);
+    const response = await axios.post("/encode/", formDataToSend, {responseType:"arraybuffer"});
     console.log('Response:', response);
     // Check for successful response status
     if (response.status === 200) {
-      console.log('Form submitted successfully');
+      console.log('Form submitted successfully', response);
 
       const href = URL.createObjectURL(new Blob([response.data]));
       // create "a" HTML element with href to file & click
