@@ -57,10 +57,11 @@ def encode(request):
         return HttpResponse(template.render(context, request))
 
 
+@csrf_exempt
 def decode(request):
     if request.method == "POST":
         text = "placeholder"
-        img = request.FILES["carrier_image"]
+        img = request.FILES["file"]
         pwd = request.POST["password"]
 
         pixelsecret = PixelSecret(secret_text=text, carrier_image=img, password=pwd)
@@ -68,11 +69,12 @@ def decode(request):
 
         decoded_text = decode_image(pixelsecret.carrier_image.path)
         decoded_text = decoded_text.strip()
-        print(decoded_text)
-
+        
         pixelsecret.delete()
 
-        context = {'decoded_text': decoded_text}
+        return HttpResponse(decoded_text)
+
+        #context = {'decoded_text': decoded_text}
     else:
         context = {'decoded_text': ""}
 
