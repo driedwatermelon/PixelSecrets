@@ -81,5 +81,5 @@ def decode(request):
 
 
 def about(request):
-    return HttpResponse("Hello, world. You're at the about page.")
+    return HttpResponse("You're at the about page.")
 
