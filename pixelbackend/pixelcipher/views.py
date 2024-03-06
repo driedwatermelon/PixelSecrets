@@ -52,9 +52,8 @@ def encode(request):
         pixelsecret.delete()
         return response
     else:
-        template = loader.get_template("pixelcipher/encode.html")
-        context = {}
-        return HttpResponse(template.render(context, request))
+        print(request)
+        return redirect("index")
 
 
 @csrf_exempt
@@ -74,14 +73,10 @@ def decode(request):
 
         return HttpResponse(decoded_text)
 
-        #context = {'decoded_text': decoded_text}
     else:
-        context = {'decoded_text': ""}
-
-    template = loader.get_template("pixelcipher/decode.html")
-    return HttpResponse(template.render(context, request))
+        return redirect("index")
 
 
 def about(request):
-    return HttpResponse("You're at the about page.")
+   return redirect("index")
 
