@@ -287,11 +287,9 @@ case 2:
         case 3:
           return (
             <Box>
-            <Container maxWidth="sm" sx={{marginBottom:3}}>
-                  <Box display="flex" flexDirection="column" alignItems="flex-start">
-                    <Typography variant="body1" textAlign="center" sx={{ marginBottom: 2, fontSize: 14 , color: 'grey'}}>
-                      Your decoded text is here.
-                    </Typography>
+            <Container maxWidth="sm" sx={{marginBottom:3, marginRight:10, marginLeft: -3 ,marginTop: 2}}>
+                  <Box display="flex" flexDirection="column" alignItems="flex-start" justifyItems="flex-start">
+                    
                   </Box>
                   <TextField
                     
