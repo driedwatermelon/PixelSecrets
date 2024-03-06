@@ -298,7 +298,7 @@ case 2:
                       fullWidth
                       variant="outlined"
                       value={formData.text}
-                      onChange={(e) => handleInputChange("text", e.target.value)}
+                      // onChange={(e) => handleInputChange("text", e.target.value)}
                       InputProps={{ style: { color: 'white' } }} 
                       InputLabelProps={{
                       style: { color: 'grey', fontSize: 14  }
