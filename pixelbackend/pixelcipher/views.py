@@ -14,6 +14,7 @@ import cv2
 
 from .models import PixelSecret
 from .LSB import encode_image, decode_image
+from .crypto import *
 
 import numpy as np
 
@@ -31,11 +32,15 @@ def encode(request):
         img = img_file.read()
         pwd = request.POST["password"]
 
+        #Encrypt the text
+        key = generate_key(pwd)
+        encrypted_text = encrypt_message(text, key)
+
         #file_extension = "." + img_file.name.split(".")[-1]
 
         input_image = cv2.imdecode(np.frombuffer(img, np.uint8), cv2.IMREAD_COLOR)
 
-        encoded_img_arr = encode_image(input_image, text)
+        encoded_img_arr = encode_image(input_image, encrypted_text)
         ret, encoded_image = cv2.imencode(".png", encoded_img_arr, [cv2.IMWRITE_JPEG_QUALITY, 100])
         if not ret:
             return HttpResponseBadRequest("Error encoding image.")
@@ -58,14 +63,18 @@ def decode(request):
         img = img_file.read()
         pwd = request.POST["password"]
 
-        file_extension = "." + img_file.name.split(".")[-1]
+        
 
         input_image = cv2.imdecode(np.frombuffer(img, np.uint8), cv2.IMREAD_UNCHANGED)
 
         decoded_text = decode_image(input_image)
         decoded_text = decoded_text.strip()
 
-        return HttpResponse(decoded_text)
+        #Decrypt the text
+        key = generate_key(pwd)
+        decrypted_text = decrypt_message(decoded_text, key)
+
+        return HttpResponse(decrypted_text)
 
     else:
         return redirect("index")
