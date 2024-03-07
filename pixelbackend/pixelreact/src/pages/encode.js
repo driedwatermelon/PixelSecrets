@@ -114,6 +114,7 @@ const handleSubmit = async (event) => {
     if (response.status === 200) {
       console.log('Form submitted successfully', response);
 
+      console.log("Image data length: ", response.data.byteLength);
       const href = URL.createObjectURL(new Blob([response.data]));
       // create "a" HTML element with href to file & click
       const link = document.createElement('a');
