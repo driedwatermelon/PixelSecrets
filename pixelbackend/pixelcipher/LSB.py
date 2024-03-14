@@ -26,7 +26,7 @@ def even_odd(integer, binary): # changes the integer to be odd or even based on 
 	
 
 def encode_image(input_image, input_text):
-	input_image = cv2.imread(input_image)
+	#input_image = cv2.imread(input_image)
 	img = input_image.copy()
 	binary_text = to_bin(input_text+ "++") #secret text in binary
 	data_len = len(binary_text) #lenght of secret message in binary 	
@@ -58,7 +58,7 @@ def encode_image(input_image, input_text):
 
 
 def decode_image(encoded_image):
-	encoded_image = cv2.imread(encoded_image)
+	#encoded_image = cv2.imread(encoded_image)
 	height, width = encoded_image.shape[:2]#image dimensions
 
 	decoded_binary= ""

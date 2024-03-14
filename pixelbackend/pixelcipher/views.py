@@ -1,17 +1,22 @@
 from os.path import splitext
 
 from django.http import HttpResponse
+from django.http import HttpResponseBadRequest
 from django.http import FileResponse
 from django.template import loader
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import never_cache
 
-from cv2 import imwrite
+import cv2
 
 from .models import PixelSecret
 from .LSB import encode_image, decode_image
+from .crypto import *
+
+import numpy as np
 
 
 def index(request):
@@ -19,67 +24,62 @@ def index(request):
 
 
 @csrf_exempt
+@never_cache
 def encode(request):
     if request.method == "POST":
         text = request.POST["text"]
-        img = request.FILES["file"]
+        img_file = request.FILES["file"]
+        img = img_file.read()
         pwd = request.POST["password"]
 
-        pixelsecret = PixelSecret(secret_text=text, carrier_image=img, password=pwd)
-        pixelsecret.save()
+        #Encrypt the text
+        key = generate_key(pwd)
+        encrypted_text = encrypt_message(text, key)
 
-        encoded_img_arr = encode_image(pixelsecret.carrier_image.path, text)
-        imwrite(pixelsecret.carrier_image.path, encoded_img_arr)
-        
-        file_type = splitext(pixelsecret.carrier_image.path)[1] # set file_type to carrier_image.path ending ex. '.png'
-        img_type = file_type[1:] # Remove leading dot from file_type ex. '.png' --> 'png'
-        img_type = "image/" + img_type
+        #file_extension = "." + img_file.name.split(".")[-1]
 
-        try:
-            with open(pixelsecret.carrier_image.path, "rb") as f:
-                response = HttpResponse(
-                    f.read(),
-                    headers={
-                        "Content-Type": img_type,
-                        "Content-Disposition": "attachment; filename=\"encoded_image" + file_type + "\"",
-                    }
-                )
-    
-        except IOError:
-            print("An IOError occured.")
-            response = HttpResponse("An IOError occured.")
+        input_image = cv2.imdecode(np.frombuffer(img, np.uint8), cv2.IMREAD_COLOR)
 
-        pixelsecret.delete()
+        encoded_img_arr = encode_image(input_image, encrypted_text)
+        ret, encoded_image = cv2.imencode(".png", encoded_img_arr, [cv2.IMWRITE_JPEG_QUALITY, 100])
+        if not ret:
+            return HttpResponseBadRequest("Error encoding image.")
+
+        image_bytes = encoded_image.tobytes()
+
+        response = HttpResponse(image_bytes, content_type = "image/png")
+        response["Content-Encoding"] = "identity"
         return response
     else:
-        template = loader.get_template("pixelcipher/encode.html")
-        context = {}
-        return HttpResponse(template.render(context, request))
+        print(request)
+        return redirect("index")
 
 
+@csrf_exempt
+@never_cache
 def decode(request):
     if request.method == "POST":
-        text = "placeholder"
-        img = request.FILES["carrier_image"]
+        img_file = request.FILES["file"]
+        img = img_file.read()
         pwd = request.POST["password"]
 
-        pixelsecret = PixelSecret(secret_text=text, carrier_image=img, password=pwd)
-        pixelsecret.save()
+        
 
-        decoded_text = decode_image(pixelsecret.carrier_image.path)
+        input_image = cv2.imdecode(np.frombuffer(img, np.uint8), cv2.IMREAD_UNCHANGED)
+
+        decoded_text = decode_image(input_image)
         decoded_text = decoded_text.strip()
-        print(decoded_text)
 
-        pixelsecret.delete()
+        #Decrypt the text
+        key = generate_key(pwd)
+        decrypted_text = decrypt_message(decoded_text, key)
 
-        context = {'decoded_text': decoded_text}
+        return HttpResponse(decrypted_text)
+
     else:
-        context = {'decoded_text': ""}
-
-    template = loader.get_template("pixelcipher/decode.html")
-    return HttpResponse(template.render(context, request))
+        return redirect("index")
 
 
 def about(request):
-    return HttpResponse("Hello, world. You're at the about page.")
+   return redirect("index")
 

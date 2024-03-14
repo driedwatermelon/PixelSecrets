@@ -2,13 +2,9 @@ from Crypto.Random import get_random_bytes
 from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
- 	
-
-#AES 256 symetric encryption
 
 message = input("Enter some text: ").encode('utf-8')
 password = input("Enter a password: ")
-
 
 def key(password):
 
@@ -21,11 +17,24 @@ def encrypt(message,key):
 
 	cipher = AES.new(key, AES.MODE_CBC)
 	ciphered_data = cipher.encrypt(pad(message,AES.block_size))
+	
+	encrypted_data = cipher.iv + ciphered_data
+	
+	print(cipher.iv)
+	print(encrypted_data)
+	return(encrypted_data)
+		
+def decrypt(key,encrypted_data):
 
-	with open("encrypted.bin","wb") as f:
-		f.write(cipher.iv)
-		f.write(ciphered_data)
-		print(ciphered_data)
-
-encrypt(message,key(password))
-
+	iv = encrypted_data[:16]
+	message = encrypted_data[16:]
+		
+	cipher = AES.new(key, AES.MODE_CBC, iv = iv)
+	original = unpad(cipher.decrypt(message), AES.block_size)
+	
+	print(original)
+	return(original)
+	
+	
+msg = encrypt(message,key(password))
+decrypt(key(password),msg)

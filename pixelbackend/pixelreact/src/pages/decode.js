@@ -25,6 +25,7 @@ const options = ["Least Significant Bit", "Discrete Cosine Transform Insertion",
 
 const VerticalStepper = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [decodedText, setDecodedText] = useState(null);
   const [formData, setFormData] = useState({
     text: "",
     file: null,
@@ -98,7 +99,7 @@ const VerticalStepper = () => {
       // Check for successful response status
       if (response.status === 200) {
         console.log('Form submitted successfully');
-        // Handle success 
+        setDecodedText(response.data);
       } else {
         console.error('Error submitting form:', response.statusText);
         // Handle error 
@@ -110,6 +111,19 @@ const VerticalStepper = () => {
   };
   
   
+  const handleDownloadForRealThisTime = async (event) => {
+    const href = URL.createObjectURL(new Blob([decodedText]));
+      // create "a" HTML element with href to file & click
+      const link = document.createElement('a');
+      link.href = href;
+      link.setAttribute('download', 'decoded_text.txt'); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+
+      // clean up "a" element & remove ObjectURL
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
+  }
   
   
   const handleDownload = async (event) => {
@@ -298,7 +312,7 @@ case 2:
                       rows={3}
                       fullWidth
                       variant="outlined"
-                      value={formData.text}
+                      value={decodedText}
                       // onChange={(e) => handleInputChange("text", e.target.value)}
                       InputProps={{ style: { color: 'white' } }} 
                       InputLabelProps={{
@@ -307,9 +321,19 @@ case 2:
                   />
               </Container>
               <Box className="step4-button">
-                <Button
+              <Button
                   variant="contained"
                   onClick={handleDownload}
+                  disabled={activeStep === steps.length}
+                  style={{
+                    marginRight: 15
+                  }}
+                >
+                  Decode
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleDownloadForRealThisTime}
                   disabled={activeStep === steps.length}
                 >
                   Download

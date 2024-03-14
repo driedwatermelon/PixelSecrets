@@ -12,12 +12,21 @@
       {% csrf_token %}
       <label for="c_image">1. Upload carrier image</label><br>
       <input type="file" id="c_image" name="carrier_image"><br>
-      <label for="pwd">2. Enter password</label><br>
+
+      <p>2. Select algorithm:</p>
+      <input type="radio" id="LSB" name="algorithm" value="Least Significant Bit">
+      <label for="LSB" class="selector">Least Significant Bit</label><br>
+      <input type="radio" id="DCTI" name="algorithm" value="Discrete Cosine Transform Insertion">
+      <label for="DCTI" class="selector">Discrete Cosine Transform Insertion</label><br>
+      <input type="radio" id="OF" name="algorithm" value="Outside File">
+      <label for="OF" class="selector">Outside File</label><br>
+
+      <label for="pwd" id="pwd-label">3. Enter password</label><br>
       <input type="password" id="pwd" name="password"><br>
       <input type="submit" id="sub_btn" value="Upload and Decode"><br>
     </form>
     <form>
-      <label for="output_text">3. Decoded text:</label><br>
+      <label for="output_text">4. Decoded text:</label><br>
       <textarea id="output_text" rows="5" cols="50">{{ decoded_text }}</textarea><br>
     </form>
   </body>
