@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+import queue
 
 def to_bin(data):	#Converts data to binary format as string
     
@@ -75,13 +75,43 @@ def decode(encoded_image):
 
 	height, width = encoded_image.shape[:2]#image dimensions
 
+	stop_bits = '0010101100101011'
+	stop_index = 0
+
 	decoded_binary= ""
 	for x in range(0,height,1):#loops through and places the binary values of every pixel into string
 		for y in range(0,width,1):
 			r, g, b = to_bin(encoded_image[x,y])
+			# Modify this
 			decoded_binary += r[-1]
+			if r[-1] == stop_bits[index]:
+				index += 1
+				print("Test1")
+				if index == 16:
+					print("Found stopper in binary.")
+					break
+			else:
+				index = 0
+
 			decoded_binary += g[-1]
+			if g[-1] == stop_bits[index]:
+				index += 1
+				print("Test2")
+				if index == 16:
+					print("Found stopper in binary.")
+					break
+			else:
+				index = 0
+
 			decoded_binary += b[-1]
+			if b[-1] == stop_bits[index]:
+				index += 1
+				print("Test3")
+				if index == 16:
+					print("Found stopper in binary.")
+					break
+			else:
+				index = 0
 			
 
 	bytes = []
